@@ -38,7 +38,7 @@ function SideBar() {
           <span>홈</span>
         </Link>
 
-        <Link to={""} className={linkClass("/favorite")}>
+        <Link to={"/favorite"} className={linkClass("/favorite")}>
           <FaRegHeart className="w-8 h-8 mr-2" />
           <span>관심 작품</span>
         </Link>

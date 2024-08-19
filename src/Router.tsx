@@ -6,6 +6,10 @@ import Home from "./screens/home/Home";
 import History from "./screens/history/History";
 import Rank from "./screens/rank/Rank";
 import Search from "./screens/search/Search";
+import DetailBook from "./screens/book/DetailBook";
+import PopularBook from "./screens/book/PopularBook";
+import LatestBook from "./screens/book/LatestBook";
+import FavorBook from "./screens/book/FavorBook";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +39,22 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <Search />,
+      },
+      {
+        path: "/detailBook/:bookId",
+        element: <DetailBook />,
+      },
+      {
+        path: "/favorite",
+        element: <FavorBook />,
+      },
+      {
+        path: "/popular",
+        element: <PopularBook />,
+      },
+      {
+        path: "/latest",
+        element: <LatestBook />,
       },
     ],
   },
