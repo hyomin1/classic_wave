@@ -1,4 +1,5 @@
 {
+  "proxy": "https://openapi.naver.com",
   "name": "classic_wave",
   "version": "0.1.0",
   "private": true,

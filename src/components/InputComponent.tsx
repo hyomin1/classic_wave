@@ -21,7 +21,7 @@ function InputComponent({ id, label, type, register, required }: IInput) {
         <input
           type={type}
           id={id}
-          className="w-[100%] rounded-2xl py-2 px-1"
+          className="w-[100%] rounded-2xl p-2 font-bold"
           {...register(id, { required: true })}
         />
       </div>
