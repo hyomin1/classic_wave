@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { QuizStartScreen } from "./QuizStartScreen/QuizStartScreen";
-import { QuizSolvingScreen } from "./QuizSolvingScreen/QuizSolvingScreen";
+import { QuizStartScreen } from "./screens/quiz/QuizStartScreen/QuizStartScreen";
+import { QuizSolvingScreen } from "./screens/quiz/QuizSolvingScreen/QuizSolvingScreen";
 
 function App() {
   return (
