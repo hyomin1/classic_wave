@@ -5,6 +5,7 @@ import Register from "./screens/auth/Register";
 import Home from "./screens/home/Home";
 import History from "./screens/history/History";
 import Rank from "./screens/rank/Rank";
+import Quiz from "./screens/quiz/Quiz";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/quiz/*",
+        element: <Quiz />,
       },
       {
         path: "/home",
