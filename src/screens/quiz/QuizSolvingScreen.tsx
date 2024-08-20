@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Stepper } from "./Stepper";
-import { QuizCompleteScreen } from "./QuizCompleteScreen"; // 모달 컴포넌트 추가
+import QuizCompleteScreen from "./QuizCompleteScreen"; // 모달 컴포넌트 추가
 
 export const QuizSolvingScreen = (): JSX.Element => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1); // 현재 단계 (1부터 시작)
   const [score, setScore] = useState(0); // 점수 관리
-  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(Array(5).fill(false)); // 각 질문에 대한 점수 계산 여부
-  const totalSteps = 5;  // 총 단계 수
+  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(Array(10).fill(false)); // 각 질문에 대한 점수 계산 여부
+  const totalSteps = 10;  // 총 단계 수
 
   const handlePreviousPage = () => {
     if (currentStep > 1) {
@@ -22,7 +22,7 @@ export const QuizSolvingScreen = (): JSX.Element => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     } else {
-      setCurrentStep(totalSteps + 1); // 모든 단계 완료 후 모달을 띄우기 위해 6으로 설정
+      setCurrentStep(totalSteps + 1); // 모든 단계 완료 후 모달을 띄우기 위해 +1으로 설정
     }
   };
 

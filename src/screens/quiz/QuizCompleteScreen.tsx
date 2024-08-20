@@ -10,7 +10,7 @@ export const QuizCompleteScreen = ({ score, totalQuestions }: QuizCompleteScreen
   const navigate = useNavigate();
 
   const handleComplete = () => {
-    navigate("/"); // 완료 후 홈으로 이동
+    navigate("/home"); // 완료 후 홈으로 이동
   };
 
   return (
