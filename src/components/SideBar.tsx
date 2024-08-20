@@ -20,6 +20,7 @@ function SideBar() {
     const isConfirm = window.confirm("로그아웃 하시겠습니까?");
     if (isConfirm) {
       localStorage.removeItem("accessToken");
+      navigate("/");
     }
   };
 
@@ -68,7 +69,7 @@ function SideBar() {
         </Link>
 
         <Link
-          to={"/"}
+          to={""}
           className="flex items-center mb-4 font-bold text-gray-400 hover:opacity-60"
           onClick={logout}
         >

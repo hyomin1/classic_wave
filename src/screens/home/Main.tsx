@@ -1,13 +1,15 @@
-import { FaSearch } from "react-icons/fa";
+import { FaHeart, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { IBook } from "../../interfaces/bookInterface";
-import { fetchLatestData, fetchPopularData } from "../../api";
+import { fetchLatestData, fetchLikeData, fetchPopularData } from "../../api";
 import BookSlider from "../../components/BookSlider";
 import "../../css/scroll.css";
 import { CiHeart } from "react-icons/ci";
 import { useAppDispatch } from "../../redux/hooks";
 import { setLatestBooks, setPopularBooks } from "../../redux/slices/bookSlice";
+import axiosApi from "../../axios";
+import { setLikeBooks } from "../../redux/slices/likeSlice";
 
 function Main() {
   const dispatch = useAppDispatch();
@@ -27,6 +29,7 @@ function Main() {
       },
     }
   );
+
   const { data: latestData } = useQuery<IBook>(
     ["latestBooks"],
     fetchLatestData,
@@ -42,6 +45,40 @@ function Main() {
       },
     }
   );
+
+  const { data: likeData, refetch } = useQuery<number[]>(
+    "like",
+    fetchLikeData,
+    {
+      onSuccess: (data) => {
+        dispatch(setLikeBooks(data));
+      },
+    }
+  );
+
+  const setLike = async (bookId: number) => {
+    await axiosApi.post(`/api/like?bookId=${bookId}`);
+    refetch();
+  };
+  const unSetLike = async (bookId: number) => {
+    await axiosApi.delete(`/api/like?bookId=${bookId}`);
+    refetch();
+  };
+
+  const setFavor = (
+    bookId: number | undefined,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (bookId) {
+      if (likeData?.includes(bookId)) {
+        unSetLike(bookId);
+      } else {
+        setLike(bookId);
+      }
+    }
+  };
 
   return (
     <div className="w-[80%] bg-[#21201E] pl-4 flex flex-col ">
@@ -73,8 +110,15 @@ function Main() {
             >
               보러가기
             </Link>
-            <button className="bg-[#e9e8eb] w-12 h-12 rounded-xl flex items-center justify-center hover:opacity-60 ml-12">
-              <CiHeart className=" fill-[#7C3FFF] w-8 h-8" />
+            <button
+              onClick={(e) => setFavor(popularData?.content[0].id, e)}
+              className="bg-[#e9e8eb] w-12 h-12 rounded-xl flex items-center justify-center hover:opacity-60 ml-12"
+            >
+              {likeData?.includes(popularData?.content[0].id || -1) ? (
+                <FaHeart className=" fill-[#6100C2] w-6 h-6" />
+              ) : (
+                <CiHeart className=" fill-[#6100C2] w-8 h-8" />
+              )}
             </button>
           </div>
         </div>
@@ -86,7 +130,7 @@ function Main() {
             <span className="text-xl font-bold text-white ">인기있는 작품</span>
             <Link
               to={"/popular"}
-              className="mr-2 text-sm text-gray-400 hover:opacity-60"
+              className="mr-2 text-sm font-bold text-gray-400 hover:opacity-60"
             >
               더보기
             </Link>
@@ -102,7 +146,7 @@ function Main() {
             </span>
             <Link
               to={"/latest"}
-              className="mr-2 text-sm text-gray-400 hover:opacity-60"
+              className="mr-2 text-sm font-bold text-gray-400 hover:opacity-60"
             >
               더보기
             </Link>

@@ -5,15 +5,46 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { CiHeart } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { fetchLikeData } from "../api";
+import { useAppDispatch } from "../redux/hooks";
+import { setLikeBooks } from "../redux/slices/likeSlice";
+import axiosApi from "../axios";
+import { FaHeart } from "react-icons/fa";
 
 interface BookSlideProps {
   data: IBook | undefined;
 }
 
 function BookSlider({ data }: BookSlideProps) {
-  const setFavor = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const dispatch = useAppDispatch();
+  const { data: likeData, refetch } = useQuery<number[]>(
+    "like",
+    fetchLikeData,
+    {
+      onSuccess: (data) => {
+        dispatch(setLikeBooks(data));
+      },
+    }
+  );
+
+  const setLike = async (bookId: number) => {
+    await axiosApi.post(`/api/like?bookId=${bookId}`);
+    refetch();
+  };
+  const unSetLike = async (bookId: number) => {
+    await axiosApi.delete(`/api/like?bookId=${bookId}`);
+    refetch();
+  };
+
+  const setFavor = (bookId: number, e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    if (likeData?.includes(bookId)) {
+      unSetLike(bookId);
+    } else {
+      setLike(bookId);
+    }
   };
 
   if (!data) return <div>Loading...</div>;
@@ -37,10 +68,14 @@ function BookSlider({ data }: BookSlideProps) {
               style={{ backgroundImage: "url('/images/dog.png')" }}
             >
               <button
-                onClick={setFavor}
+                onClick={(e) => setFavor(book.id, e)}
                 className="bg-[#e9e8eb] w-12 h-12 rounded-xl flex items-center justify-center hover:opacity-60 mr-2 mt-2"
               >
-                <CiHeart className=" fill-[#6100C2] w-8 h-8" />
+                {likeData?.includes(book.id) ? (
+                  <FaHeart className=" fill-[#6100C2] w-6 h-6" />
+                ) : (
+                  <CiHeart className=" fill-[#6100C2] w-8 h-8" />
+                )}
               </button>
             </Link>
 
