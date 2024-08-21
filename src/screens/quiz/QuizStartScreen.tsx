@@ -1,24 +1,30 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import Title from "../../components/Title"; // Title 컴포넌트 가져오기
+import { useNavigate, useLocation } from "react-router-dom";
+import Title from "../../components/Title";
 
 export const QuizStartScreen = (): JSX.Element => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { book } = location.state || {};  // 이전 페이지에서 전달된 책 정보를 가져옴
 
   const handleStartQuiz = () => {
-    navigate("solve"); // "solve" 경로로 이동
+    navigate("solve");  // "solve" 경로로 이동
   };
+
+  if (!book) {
+    return <div>Loading...</div>;  // 책 정보가 없을 경우 로딩 표시
+  }
 
   return (
     <div className="bg-[#151515] flex flex-col items-center justify-between w-full h-screen px-12 py-8">
       <div className="flex items-center w-full">
-        <Title />  {/* Title 컴포넌트 사용 */}
+        <Title />
       </div>
 
       <div className="flex flex-col lg:flex-row items-center justify-between w-full h-full mt-10">
         <div className="flex flex-col items-start lg:w-1/2">
-          <h1 className="text-5xl font-bold text-white mb-2">Robinson Crusoe</h1>
-          <p className="text-gray-400 text-lg mb-8">Daniel Defoe</p>
+          <h1 className="text-5xl font-bold text-white mb-2">{book.name}</h1>
+          <p className="text-gray-400 text-lg mb-8">{book.authorName}</p>
           <button
             className="bg-[#6100c2] text-white px-6 py-3 rounded-lg font-bold text-lg hover:bg-purple-700"
             onClick={handleStartQuiz}
@@ -30,7 +36,7 @@ export const QuizStartScreen = (): JSX.Element => {
           <img
             className="w-[90%] h-auto rounded-lg object-cover"
             alt="Book Cover"
-            src="images\Rectangle 213.png"
+            src={book.coverImageUrl || "images/Rectangle 213.png"}  // 책의 커버 이미지를 사용, 없을 경우 기본 이미지 사용
           />
         </div>
       </div>

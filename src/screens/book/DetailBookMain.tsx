@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axiosApi from "../../axios";
 import { IBookDetail } from "../../interfaces/bookInterface";
 
 function DetailBookMain() {
   const { bookId } = useParams();
+  const navigate = useNavigate();
   const [book, setBook] = useState<IBookDetail>();
+
   const fetchMetaData = async () => {
-    // 상세보기
-    // secentList가 그림책 만드는 데이터
     const res = await axiosApi.get("/api/book/metadata", {
       params: {
         bookId,
@@ -16,9 +16,14 @@ function DetailBookMain() {
     });
     setBook(res.data);
   };
+
   useEffect(() => {
     fetchMetaData();
-  }, []);
+  }, [bookId]);
+
+  const handleQuizStart = () => {
+    navigate("/quiz", { state: { book } });
+  };
 
   return (
     <div className="w-[80%] bg-[#21201E] pl-4 flex flex-col p-4">
@@ -39,7 +44,10 @@ function DetailBookMain() {
             <button className="hover:opacity-60 bg-[#7C3FFF] w-28 h-12 rounded-xl mr-4">
               줄거리 보기
             </button>
-            <button className="hover:opacity-60 bg-[#7C3FFF] w-28 h-12 rounded-xl">
+            <button
+              className="hover:opacity-60 bg-[#7C3FFF] w-28 h-12 rounded-xl"
+              onClick={handleQuizStart}
+            >
               퀴즈 풀기
             </button>
           </div>
