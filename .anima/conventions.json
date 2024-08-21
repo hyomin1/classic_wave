@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"assetsPath":"public/","componentLibrary":"material-ui","componentsPath":"src/components","framework":"react","language":"typescript","nextRouterType":null,"styling":"tailwind","tailwindConfigPath":"tailwind.config.js","tailwindConfigReuseEnabled":false}
-=======
-{"assetsPath":"public/","componentLibrary":"none","componentsPath":"src","framework":"react","language":"typescript","nextRouterType":null,"styling":"tailwind","tailwindConfigPath":"tailwind.config.js","tailwindConfigReuseEnabled":false}
->>>>>>> 73e88888589a1ac27da11f2a8bfb30f47f0efe2f
+{"assetsPath":"public/images/","componentLibrary":"material-ui","componentsPath":"src/components","framework":"react","language":"typescript","nextRouterType":null,"styling":"tailwind","tailwindConfigPath":"tailwind.config.js","tailwindConfigReuseEnabled":false}
