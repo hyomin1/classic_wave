@@ -1,13 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosApi from "../../axios"; // axios 인스턴스
 
 interface QuizCompleteScreenProps {
   score: number;
   totalQuestions: number;
+  quizListId: number;
+  userAnswers: number[];
 }
 
-export const QuizCompleteScreen = ({ score, totalQuestions }: QuizCompleteScreenProps): JSX.Element => {
+export const QuizCompleteScreen = ({
+  score,
+  totalQuestions,
+  quizListId,
+  userAnswers,
+}: QuizCompleteScreenProps): JSX.Element => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // 퀴즈 제출 및 채점 API 호출
+    const submitQuiz = async () => {
+      try {
+        const response = await axiosApi.post("/api/quiz/submit", {
+          quizListId,
+          userAnswers,
+        });
+
+        const finalScore = response.data.score;
+        console.log("Quiz submitted successfully. Final score:", finalScore);
+
+        // 이후 히스토리나 랭킹에 반영되는 추가 로직을 여기에 추가 가능
+      } catch (error) {
+        console.error("Failed to submit quiz", error);
+      }
+    };
+
+    submitQuiz();
+  }, [quizListId, userAnswers]);
 
   const handleComplete = () => {
     navigate("/home"); // 완료 후 홈으로 이동
