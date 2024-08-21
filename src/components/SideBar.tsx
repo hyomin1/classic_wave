@@ -63,7 +63,7 @@ function SideBar() {
       </div>
 
       <div className="flex flex-col">
-        <Link to={""} className={linkClass("/profile")}>
+        <Link to={"/profile"} className={linkClass("/profile")}>
           <CgProfile className="w-8 h-8 mr-2" />
           <span>내 정보</span>
         </Link>

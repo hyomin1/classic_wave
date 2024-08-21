@@ -1,14 +1,14 @@
 import React from "react";
 import SideBar from "../../components/SideBar";
-import HistoryMain from "./HistoryMain";
+import ProfileMain from "./ProfileMain";
 
-function History() {
+function Home() {
   return (
     <div className="flex h-screen">
       <SideBar />
-      <HistoryMain />
+      <ProfileMain />
     </div>
   );
 }
 
-export default History;
+export default Home;
