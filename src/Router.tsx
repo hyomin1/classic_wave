@@ -11,6 +11,7 @@ import PopularBook from "./screens/book/PopularBook";
 import LatestBook from "./screens/book/LatestBook";
 import FavorBook from "./screens/book/FavorBook";
 import Quiz from "./screens/quiz/Quiz";
+import Profile from "./screens/profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
       {
         path: "/quiz/*",

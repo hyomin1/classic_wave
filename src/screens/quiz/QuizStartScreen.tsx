@@ -30,7 +30,7 @@ export const QuizStartScreen = (): JSX.Element => {
           <img
             className="w-[90%] h-auto rounded-lg object-cover"
             alt="Book Cover"
-            src="/images/Rectangle 213.png"
+            src="images\Rectangle 213.png"
           />
         </div>
       </div>
