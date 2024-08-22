@@ -36,7 +36,7 @@ export const QuizStartScreen = (): JSX.Element => {
           <img
             className="w-[90%] h-auto rounded-lg object-cover"
             alt="Book Cover"
-            src={book.coverImageUrl || "images/Rectangle 213.png"}  // 책의 커버 이미지를 사용, 없을 경우 기본 이미지 사용
+            src={book.coverImageUrl || "/images/Rectangle213.png"}  // 책의 커버 이미지를 사용, 없을 경우 기본 이미지 사용
           />
         </div>
       </div>

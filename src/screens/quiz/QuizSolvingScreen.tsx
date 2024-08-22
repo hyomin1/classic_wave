@@ -1,32 +1,42 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Stepper } from "./Stepper";
 import QuizCompleteScreen from "./QuizCompleteScreen";
-import axiosApi from "../../axios";  // axios 인스턴스
+import axiosApi from "../../axios"; // axios 인스턴스
 
 export const QuizSolvingScreen = (): JSX.Element => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { book } = location.state || {}; // 이전 페이지에서 전달된 책 정보
   const [currentStep, setCurrentStep] = useState(1);
   const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
   const [quizData, setQuizData] = useState<any[]>([]);
   const [quizListId, setQuizListId] = useState<number | null>(null);
-  const totalSteps = 10;
-  const bookTitle = "Robinson Crusoe";
 
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
-        const response = await axiosApi.post("/api/quiz/create", { bookTitle });
-        setQuizData(response.data.quiz);
-        setQuizListId(response.data.quizListId);
+        console.log(book?.name);
+        if (book?.name) {
+          console.log(book?.name);
+          const response = await axiosApi.post("/api/quiz/addOrView", {
+            bookTitle: book.name,
+          });
+          setQuizData(response.data.questions);
+          setQuizListId(response.data.quizListId);
+        } else {
+          console.error("No book name provided");
+        }
       } catch (error) {
         console.error("Failed to fetch quiz data", error);
       }
     };
 
-    fetchQuizData();
-  }, [bookTitle]);
+    if (book) {
+      fetchQuizData();
+    }
+  }, [book]);
 
   const handlePreviousPage = () => {
     if (currentStep > 1) {
@@ -37,16 +47,16 @@ export const QuizSolvingScreen = (): JSX.Element => {
   };
 
   const handleNextStep = () => {
-    if (currentStep < totalSteps) {
+    if (currentStep < quizData.length) {
       setCurrentStep(currentStep + 1);
     } else {
-      setCurrentStep(totalSteps + 1);
+      setCurrentStep(quizData.length + 1); // 모든 단계 완료 후 모달을 띄우기 위해 +1으로 설정
     }
   };
 
   const handleOptionSelect = (selectedOption: number) => {
     if (answeredQuestions[currentStep - 1] === undefined) {
-      const correctAnswer = quizData[currentStep - 1]?.answer;  // 안전하게 접근
+      const correctAnswer = quizData[currentStep - 1]?.answer; // 정답 체크
       if (selectedOption === correctAnswer) {
         setScore(score + 1);
       }
@@ -57,14 +67,15 @@ export const QuizSolvingScreen = (): JSX.Element => {
     handleNextStep();
   };
 
-  if (quizData.length === 0) {
+  if (!quizData.length) {
     return <div>Loading...</div>;
   }
 
-  const currentQuiz = quizData[currentStep - 1]; // 방어적 접근
+  const currentQuiz = quizData[currentStep - 1];
 
   return (
     <div className="bg-[#151515] flex flex-col items-center justify-between w-full h-screen px-12 py-8">
+      {/* 상단 로고 */}
       <div className="flex items-center w-full">
         <img className="w-8 h-8" alt="Coffee" src="/images/coffee.svg" />
         <div className="ml-2 text-white text-[22px] font-bold tracking-[1.32px]">
@@ -72,8 +83,10 @@ export const QuizSolvingScreen = (): JSX.Element => {
         </div>
       </div>
 
-      <Stepper currentStep={currentStep} totalSteps={totalSteps} />
+      {/* 스텝퍼 */}
+      <Stepper currentStep={currentStep} totalSteps={quizData.length} />
 
+      {/* 문제와 선택지 */}
       <div className="flex flex-col justify-center items-center w-full h-full">
         <div className="bg-[#6100c2] rounded-lg p-8 max-w-4xl w-full">
           <h2 className="text-white text-3xl font-bold mb-8">
@@ -93,6 +106,7 @@ export const QuizSolvingScreen = (): JSX.Element => {
           </div>
         </div>
 
+        {/* 네비게이션 버튼 */}
         <div className="flex justify-between w-full max-w-4xl mt-12">
           <button
             onClick={handlePreviousPage}
@@ -109,10 +123,11 @@ export const QuizSolvingScreen = (): JSX.Element => {
         </div>
       </div>
 
-      {currentStep > totalSteps && quizListId !== null && (
+      {/* 퀴즈 완료 모달 */}
+      {currentStep > quizData.length && quizListId !== null && (
         <QuizCompleteScreen
           score={score}
-          totalQuestions={totalSteps}
+          totalQuestions={quizData.length}
           quizListId={quizListId}
           userAnswers={answeredQuestions}
         />

@@ -18,6 +18,7 @@ function Main() {
     ["popularBooks"],
     fetchPopularData,
     {
+      
       staleTime: 1000 * 60 * 10, // 10 minutes
       refetchInterval: 1000 * 60 * 10, // 10 minutes
       refetchOnWindowFocus: false, // Do not refetch on window focus
@@ -25,7 +26,9 @@ function Main() {
       retry: 3, // Retry up to 3 times on failure
       keepPreviousData: true, // Keep previous data while loading new data
       onSuccess: (data) => {
+        console.log(data);
         dispatch(setPopularBooks(data));
+        
       },
     }
   );

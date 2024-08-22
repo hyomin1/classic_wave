@@ -18,7 +18,6 @@ export const QuizCompleteScreen = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 퀴즈 제출 및 채점 API 호출
     const submitQuiz = async () => {
       try {
         const response = await axiosApi.post("/api/quiz/submit", {
@@ -28,8 +27,6 @@ export const QuizCompleteScreen = ({
 
         const finalScore = response.data.score;
         console.log("Quiz submitted successfully. Final score:", finalScore);
-
-        // 이후 히스토리나 랭킹에 반영되는 추가 로직을 여기에 추가 가능
       } catch (error) {
         console.error("Failed to submit quiz", error);
       }
@@ -45,7 +42,6 @@ export const QuizCompleteScreen = ({
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50">
       <div className="bg-white rounded-lg p-8 max-w-2xl w-full relative">
-        {/* 점수 표시 원 */}
         <div className="flex justify-center items-center mb-8">
           <div className="bg-[#6100c2] rounded-full w-64 h-64 flex items-center justify-center">
             <div className="text-center">
@@ -55,7 +51,6 @@ export const QuizCompleteScreen = ({
           </div>
         </div>
 
-        {/* 완료 버튼 */}
         <button
           onClick={handleComplete}
           className="absolute bottom-8 right-8 bg-[#6100c2] text-white px-8 py-3 rounded-lg font-bold hover:bg-purple-700"
