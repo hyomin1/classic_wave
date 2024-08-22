@@ -9,17 +9,15 @@ export const QuizSolvingScreen = (): JSX.Element => {
   const location = useLocation();
   const { book } = location.state || {}; // 이전 페이지에서 전달된 책 정보
   const [currentStep, setCurrentStep] = useState(1);
-  const [score, setScore] = useState(0);
   const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
   const [quizData, setQuizData] = useState<any[]>([]);
   const [quizListId, setQuizListId] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // 추가: 퀴즈 제출 상태
 
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
-        console.log(book?.name);
         if (book?.name) {
-          console.log(book?.name);
           const response = await axiosApi.post("/api/quiz/addOrView", {
             bookTitle: book.name,
           });
@@ -50,16 +48,12 @@ export const QuizSolvingScreen = (): JSX.Element => {
     if (currentStep < quizData.length) {
       setCurrentStep(currentStep + 1);
     } else {
-      setCurrentStep(quizData.length + 1); // 모든 단계 완료 후 모달을 띄우기 위해 +1으로 설정
+      setIsSubmitting(true); // 제출 시작
     }
   };
 
   const handleOptionSelect = (selectedOption: number) => {
     if (answeredQuestions[currentStep - 1] === undefined) {
-      const correctAnswer = quizData[currentStep - 1]?.answer; // 정답 체크
-      if (selectedOption === correctAnswer) {
-        setScore(score + 1);
-      }
       const updatedAnswers = [...answeredQuestions];
       updatedAnswers[currentStep - 1] = selectedOption;
       setAnsweredQuestions(updatedAnswers);
@@ -97,7 +91,11 @@ export const QuizSolvingScreen = (): JSX.Element => {
               Object.keys(currentQuiz.options).map((key, index) => (
                 <button
                   key={index}
-                  className="bg-[#d1d1d1] text-black py-4 px-8 rounded-lg hover:bg-gray-400 transition-colors"
+                  className={`bg-[#d1d1d1] text-black py-4 px-8 rounded-lg hover:bg-gray-400 transition-colors ${
+                    answeredQuestions[currentStep - 1] === Number(key)
+                      ? "bg-[#b0b0b0]"
+                      : ""
+                  }`}
                   onClick={() => handleOptionSelect(Number(key))}
                 >
                   {currentQuiz.options[key]}
@@ -124,9 +122,12 @@ export const QuizSolvingScreen = (): JSX.Element => {
       </div>
 
       {/* 퀴즈 완료 모달 */}
-      {currentStep > quizData.length && quizListId !== null && (
+      {isSubmitting && quizListId !== null && (
         <QuizCompleteScreen
-          score={score}
+          score={answeredQuestions.filter(
+            (answer, index) =>
+              answer === Number(quizData[index].answer)
+          ).length}
           totalQuestions={quizData.length}
           quizListId={quizListId}
           userAnswers={answeredQuestions}

@@ -8,7 +8,7 @@ export const QuizStartScreen = (): JSX.Element => {
   const { book } = location.state || {};  // 이전 페이지에서 전달된 책 정보를 가져옴
 
   const handleStartQuiz = () => {
-    navigate("solve");  // "solve" 경로로 이동
+    navigate("solve", { state: { book } });  // "solve" 경로로 이동, book 정보를 전달.
   };
 
   if (!book) {
