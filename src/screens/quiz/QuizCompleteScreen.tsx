@@ -59,7 +59,7 @@ export const QuizCompleteScreen = ({
             </button>
           </>
         ) : (
-          <p className="text-center">채점 중...</p> // 모달에만 Loading 표시
+          <p className="text-center">Scoring...</p> // 모달에만 Loading 표시
         )}
       </div>
     </div>

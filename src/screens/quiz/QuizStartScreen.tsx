@@ -34,7 +34,7 @@ export const QuizStartScreen = (): JSX.Element => {
         </div>
         <div className="flex justify-center items-center lg:w-1/2 mt-10 lg:mt-0">
           <img
-            className="w-[90%] h-auto rounded-lg object-cover"
+            className="max-w-[75%] max-h-[75%] rounded-lg object-contain"  
             alt="Book Cover"
             src={book.coverImageUrl || "/images/Rectangle213.png"}  // 책의 커버 이미지를 사용, 없을 경우 기본 이미지 사용
           />

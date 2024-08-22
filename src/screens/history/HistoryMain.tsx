@@ -1,54 +1,65 @@
-import React from "react";
-import Title from "../../components/Title";
+import React, { useEffect, useState } from "react";
+import axiosApi from "../../axios"; // axios 인스턴스
+import { useNavigate } from "react-router-dom";
 
 interface HistoryItem {
-  id: number;
-  title: string;
+  bookTitle: string;
   author: string;
-  year: number;
-  imageUrl: string;
+  publishedYear: number;
+  quizsubmitId: number;
 }
 
-const historyData: HistoryItem[] = [
-  {
-    id: 1,
-    title: "Robinson Crusoe",
-    author: "Daniel Defoe",
-    year: 1719,
-    imageUrl: "/images/robinson-crusoe.jpg",
-  },
-  {
-    id: 2,
-    title: "Pride and Prejudice",
-    author: "Jane Austen",
-    year: 1813,
-    imageUrl: "/images/pride-and-prejudice.jpg",
-  },
-  // 추가적인 히스토리 데이터...
-];
-
 function HistoryMain() {
+  const [historyData, setHistoryData] = useState<HistoryItem[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchHistoryData = async () => {
+      try {
+        const response = await axiosApi.get("/api/history");
+        setHistoryData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch history data", error);
+      }
+    };
+
+    fetchHistoryData();
+  }, []);
+
+  const handleDetailView = (quizsubmitId: number) => {
+    navigate(`/history/${quizsubmitId}`);
+  };
+
   return (
-    <div className="w-[80%] p-8">
+    <div className="w-[80%] p-8 bg-[#151515] overflow-y-auto h-screen">
       <div className="mb-8">
-        <Title />
-        <h1 className="text-3xl font-bold text-white mt-4">Your Quiz History</h1>
+        <h1 className="text-3xl font-bold text-white mt-4">히스토리</h1>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {historyData.map((item) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {historyData.map((item, index) => (
           <div
-            key={item.id}
+            key={index}
             className="bg-[#21201E] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
           >
             <img
-              src={item.imageUrl}
-              alt={item.title}
+              src="/images/placeholder-image.png" // 책의 이미지가 없는 경우 placeholder 이미지 사용
+              alt={item.bookTitle}
               className="w-full h-48 object-cover"
             />
             <div className="p-4 text-white">
-              <h2 className="text-xl font-bold mb-2">{item.title}</h2>
-              <p className="text-gray-400">{item.author}</p>
-              <p className="text-gray-500">{item.year}</p>
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold">{item.bookTitle}</h2>
+                <p className="text-lg font-bold">점수 확인</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <p className="text-gray-400">{`${item.publishedYear} | ${item.author}`}</p>
+                <button
+                  className="text-sm font-bold text-purple-500"
+                  onClick={() => handleDetailView(item.quizsubmitId)}
+                >
+                  상세보기
+                </button>
+              </div>
             </div>
           </div>
         ))}
