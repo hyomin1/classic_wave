@@ -1,83 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axiosApi from "../../axios";
 
 interface RankItem {
-  id: number;
+  loginId: string;
   name: string;
-  score: number;
-  photoUrl: string;
+  rating: number;
+  photoUrl?: string;
 }
 
-const rankData: RankItem[] = [
-  {
-    id: 1,
-    name: "Antonio Lima",
-    score: 24,
-    photoUrl: "/images/user1.png",
-  },
-  {
-    id: 2,
-    name: "Fernanda Araujo",
-    score: 22,
-    photoUrl: "/images/user2.png",
-  },
-  {
-    id: 3,
-    name: "Valdilene Carvalho",
-    score: 21,
-    photoUrl: "/images/user3.png",
-  },
-  {
-    id: 4,
-    name: "Rafael Pereira",
-    score: 20,
-    photoUrl: "/images/user4.png",
-  },
-  {
-    id: 5,
-    name: "Larissa Santos",
-    score: 19,
-    photoUrl: "/images/user5.png",
-  },
-  {
-    id: 6,
-    name: "Gabrielly Tavares",
-    score: 22,
-    photoUrl: "/images/user6.png",
-  },
-  {
-    id: 7,
-    name: "Lucas Ferreira",
-    score: 15,
-    photoUrl: "/images/user7.png",
-  },
-  {
-    id: 8,
-    name: "Beatriz Silva",
-    score: 14,
-    photoUrl: "/images/user8.png",
-  },
-  {
-    id: 9,
-    name: "Carlos Eduardo",
-    score: 24,
-    photoUrl: "/images/user9.png",
-  },
-  {
-    id: 10,
-    name: "Amanda Souza",
-    score: 12,
-    photoUrl: "/images/user10.png",
-  },
-  // 추가적인 데이터 예시
-];
-
 function RankMain() {
+  const [rankData, setRankData] = useState<RankItem[]>([]);
+
+  useEffect(() => {
+    const fetchRankData = async () => {
+      try {
+        const response = await axiosApi.get<RankItem[]>("/api/ranking");
+        setRankData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch ranking data", error);
+      }
+    };
+
+    fetchRankData();
+  }, []);
+
   // 사용자 데이터를 점수 내림차순, 이름 오름차순으로 정렬
   const sortedRankData = [...rankData].sort((a, b) => {
-    if (b.score === a.score) {
+    if (b.rating === a.rating) {
       return a.name.localeCompare(b.name); // 이름 사전순 정렬
     }
-    return b.score - a.score;
+    return b.rating - a.rating;
   });
 
   // 상위 3명 추출 (사용자가 3명 이하일 경우에도 대응)
@@ -87,8 +39,8 @@ function RankMain() {
   const leaderboard = sortedRankData.length > 3 ? sortedRankData.slice(3) : [];
 
   // 프로필 이미지가 없을 경우 기본 이미지로 설정하는 함수
-  const getProfileImage = (photoUrl: string) => {
-    return photoUrl || "/images/profile.png";
+  const getProfileImage = (photoUrl?: string) => {
+    return photoUrl || "/profile.png";
   };
 
   return (
@@ -109,7 +61,7 @@ function RankMain() {
               <span className="text-lg font-bold">{topThree[1].name}</span>
               <div className="w-24 h-40 flex flex-col justify-center items-center mt-2 bg-[#6100c2] rounded-lg">
                 <div className="text-4xl font-bold mb-2">🎖️</div>
-                <span className="text-4xl font-bold">{topThree[1].score}</span>
+                <span className="text-4xl font-bold">{topThree[1].rating}</span>
                 <span className="text-lg font-semibold">Vendas</span>
               </div>
             </div>
@@ -124,7 +76,7 @@ function RankMain() {
               <span className="text-lg font-bold">{topThree[0].name}</span>
               <div className="w-24 h-52 flex flex-col justify-center items-center mt-2 bg-[#FFD700] rounded-lg">
                 <div className="text-4xl font-bold mb-2">🏆</div>
-                <span className="text-4xl font-bold">{topThree[0].score}</span>
+                <span className="text-4xl font-bold">{topThree[0].rating}</span>
                 <span className="text-lg font-semibold">Vendas</span>
               </div>
             </div>
@@ -139,7 +91,7 @@ function RankMain() {
               <span className="text-lg font-bold">{topThree[2].name}</span>
               <div className="w-24 h-36 flex flex-col justify-center items-center mt-2 bg-[#6100c2] rounded-lg">
                 <div className="text-4xl font-bold mb-2">🎖️</div>
-                <span className="text-4xl font-bold">{topThree[2].score}</span>
+                <span className="text-4xl font-bold">{topThree[2].rating}</span>
                 <span className="text-lg font-semibold">Vendas</span>
               </div>
             </div>
@@ -160,7 +112,7 @@ function RankMain() {
               </thead>
               <tbody>
                 {leaderboard.map((item, index) => (
-                  <tr key={item.id} className="border-t border-gray-700">
+                  <tr key={item.loginId} className="border-t border-gray-700">
                     <td className="p-2">{index + 4}</td>
                     <td className="p-2">
                       <img
@@ -170,7 +122,7 @@ function RankMain() {
                       />
                     </td>
                     <td className="p-2">{item.name}</td>
-                    <td className="p-2 text-center">{item.score}</td>
+                    <td className="p-2 text-center">{item.rating}</td>
                   </tr>
                 ))}
               </tbody>
