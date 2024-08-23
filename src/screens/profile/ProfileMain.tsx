@@ -4,6 +4,7 @@ import axiosApi from "../../axios"; // axios 인스턴스
 function ProfileMain() {
   const [name, setName] = useState<string>("");
   const [introduction, setIntroduction] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string>("/images/profile.png");
 
   useEffect(() => {
     // 프로필 정보 불러오기
@@ -12,6 +13,8 @@ function ProfileMain() {
         const response = await axiosApi.get("/api/profile");
         setName(response.data.name);
         setIntroduction(response.data.introduction);
+        // 응답에 프로필 이미지가 있으면 설정하고, 없으면 기본 이미지 사용
+        setProfileImage(response.data.photoUrl || "/images/profile.png");
       } catch (error) {
         console.error("Failed to fetch profile information", error);
       }
@@ -37,10 +40,10 @@ function ProfileMain() {
   return (
     <div className="flex flex-col items-start w-[80%] p-8 bg-black">
       <h1 className="text-white text-3xl font-bold mb-8">내 정보</h1>
-      
-      {/* 배지와 업데이트 버튼 */}
+
+      {/* 프로필 이미지와 업데이트 버튼 */}
       <div className="flex items-center mb-8 justify-start">
-        <img src="/images/grade.png" alt="Grade Badge" className="w-32 h-32" />
+        <img src={profileImage} alt="프로필 이미지" className="w-32 h-32" />
         <button
           className="bg-[#6100c2] text-white px-6 py-2 rounded-lg font-bold text-lg ml-8 hover:bg-purple-700"
           onClick={handleUpdateProfile}
