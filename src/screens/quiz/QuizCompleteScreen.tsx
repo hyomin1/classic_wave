@@ -3,16 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axiosApi from "../../axios"; // axios 인스턴스
 
 interface QuizCompleteScreenProps {
-  score: number; 
   totalQuestions: number;
   quizListId: number;
   userAnswers: number[];
+  score: number; // 이 부분을 추가합니다.
 }
 
 export const QuizCompleteScreen = ({
   totalQuestions,
   quizListId,
   userAnswers,
+  score,
 }: QuizCompleteScreenProps): JSX.Element => {
   const [finalScore, setFinalScore] = useState<number | null>(null);
   const navigate = useNavigate();
@@ -35,7 +36,9 @@ export const QuizCompleteScreen = ({
   }, [quizListId, userAnswers]);
 
   const handleComplete = () => {
-    navigate("/home"); // 완료 후 홈으로 이동
+    if (finalScore !== null) {
+      navigate("/history", { state: { score: finalScore } }); // 히스토리 페이지로 이동하면서 점수 전달
+    }
   };
 
   return (

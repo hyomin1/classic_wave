@@ -13,6 +13,7 @@ export const QuizSolvingScreen = (): JSX.Element => {
   const [quizData, setQuizData] = useState<any[]>([]);
   const [quizListId, setQuizListId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false); // 추가: 퀴즈 제출 상태
+  const [score, setScore] = useState(0); // 점수 상태 추가
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -57,6 +58,10 @@ export const QuizSolvingScreen = (): JSX.Element => {
       const updatedAnswers = [...answeredQuestions];
       updatedAnswers[currentStep - 1] = selectedOption;
       setAnsweredQuestions(updatedAnswers);
+      // 정답 체크
+      if (quizData[currentStep - 1]?.answer === String(selectedOption)) {
+        setScore((prevScore) => prevScore + 1); // 점수 증가
+      }
     }
     handleNextStep();
   };
@@ -124,10 +129,7 @@ export const QuizSolvingScreen = (): JSX.Element => {
       {/* 퀴즈 완료 모달 */}
       {isSubmitting && quizListId !== null && (
         <QuizCompleteScreen
-          score={answeredQuestions.filter(
-            (answer, index) =>
-              answer === Number(quizData[index].answer)
-          ).length}
+          score={score}
           totalQuestions={quizData.length}
           quizListId={quizListId}
           userAnswers={answeredQuestions}

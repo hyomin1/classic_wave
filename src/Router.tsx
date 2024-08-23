@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/history",
+        path: "/history/*",
         element: <History />,
       },
       {
