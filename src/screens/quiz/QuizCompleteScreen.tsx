@@ -6,7 +6,7 @@ interface QuizCompleteScreenProps {
   totalQuestions: number;
   quizListId: number;
   userAnswers: number[];
-  score: number; // 이 부분을 추가합니다.
+  score: number; 
 }
 
 export const QuizCompleteScreen = ({
