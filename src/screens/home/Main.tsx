@@ -2,7 +2,12 @@ import { FaHeart, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { IBook } from "../../interfaces/bookInterface";
-import { fetchLatestData, fetchLikeData, fetchPopularData } from "../../api";
+import {
+  fetchLatestData,
+  fetchLikeData,
+  fetchPopularData,
+  getImg,
+} from "../../api";
 import BookSlider from "../../components/BookSlider";
 import "../../css/scroll.css";
 import { CiHeart } from "react-icons/ci";
@@ -10,6 +15,7 @@ import { useAppDispatch } from "../../redux/hooks";
 import { setLatestBooks, setPopularBooks } from "../../redux/slices/bookSlice";
 import axiosApi from "../../axios";
 import { setLikeBooks } from "../../redux/slices/likeSlice";
+import { useEffect, useState } from "react";
 
 function Main() {
   const dispatch = useAppDispatch();
@@ -18,7 +24,6 @@ function Main() {
     ["popularBooks"],
     fetchPopularData,
     {
-      
       staleTime: 1000 * 60 * 10, // 10 minutes
       refetchInterval: 1000 * 60 * 10, // 10 minutes
       refetchOnWindowFocus: false, // Do not refetch on window focus
@@ -26,9 +31,7 @@ function Main() {
       retry: 3, // Retry up to 3 times on failure
       keepPreviousData: true, // Keep previous data while loading new data
       onSuccess: (data) => {
-        console.log(data);
         dispatch(setPopularBooks(data));
-        
       },
     }
   );
@@ -58,6 +61,12 @@ function Main() {
       },
     }
   );
+  const [thumbnail, setThumbnail] = useState("");
+  useEffect(() => {
+    if (popularData) {
+      getImg(popularData.content[5].id).then((data) => setThumbnail(data));
+    }
+  }, []);
 
   const setLike = async (bookId: number) => {
     await axiosApi.post(`/api/like?bookId=${bookId}`);
@@ -86,8 +95,11 @@ function Main() {
   return (
     <div className="w-[80%] bg-[#21201E] pl-4 flex flex-col ">
       <div
-        className="flex flex-col justify-between  p-4 bg-center bg-cover h-[45%]"
-        style={{ backgroundImage: "url('/images/dog.png')" }}
+        className="flex flex-col justify-between  p-4 bg-center bg-cover h-[100%]"
+        style={{
+          backgroundImage: `url('${thumbnail}')`,
+          backgroundSize: "cover",
+        }}
       >
         <div className="flex justify-between">
           <div></div>
@@ -96,28 +108,32 @@ function Main() {
               <FaSearch className="fill-[white] w-6 h-6 hover:opacity-60 mr-4" />
             </Link>
 
-            <img src="/images/profile.png" alt="기본 프로필 이미지" className="w-8 h-8 rounded-full" />
+            <img
+              src="/images/profile.png"
+              alt="기본 프로필 이미지"
+              className="w-8 h-8 rounded-full"
+            />
             <span className="ml-2 text-lg font-bold text-white">이효민</span>
           </div>
         </div>
 
         <div className="flex flex-col text-white">
           <span className="my-4 text-3xl font-extrabold">
-            {popularData?.content[0].name}
+            {popularData?.content[5].name}
           </span>
-          <span className="mb-4">{popularData?.content[0].authorName}</span>
+          <span className="mb-4">{popularData?.content[5].authorName}</span>
           <div className="flex">
             <Link
-              to={`/detailBook/${popularData?.content[0].id}`}
+              to={`/detailBook/${popularData?.content[5].id}`}
               className="hover:opacity-60 bg-[#7C3FFF] w-28 h-12 rounded-xl font-bold flex items-center justify-center"
             >
               보러가기
             </Link>
             <button
-              onClick={(e) => setFavor(popularData?.content[0].id, e)}
+              onClick={(e) => setFavor(popularData?.content[5].id, e)}
               className="bg-[#e9e8eb] w-12 h-12 rounded-xl flex items-center justify-center hover:opacity-60 ml-12"
             >
-              {likeData?.includes(popularData?.content[0].id || -1) ? (
+              {likeData?.includes(popularData?.content[5].id || -1) ? (
                 <FaHeart className=" fill-[#6100C2] w-6 h-6" />
               ) : (
                 <CiHeart className=" fill-[#6100C2] w-8 h-8" />

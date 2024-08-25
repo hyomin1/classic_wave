@@ -16,6 +16,7 @@ function RankMain() {
       try {
         const response = await axiosApi.get<RankItem[]>("/api/ranking");
         setRankData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch ranking data", error);
       }
@@ -43,24 +44,25 @@ function RankMain() {
     return photoUrl || "/profile.png";
   };
 
+  console.log(topThree);
+
   return (
     <div className="flex w-full h-full bg-[#151515] text-white">
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 p-8 overflow-y-auto">
         {/* 상단 제목 */}
-        <h1 className="text-4xl font-bold mb-8">랭킹</h1>
+        <h1 className="mb-8 text-4xl font-bold">랭킹</h1>
 
         {/* 상위 3명 랭킹 */}
-        <div className="flex justify-center items-end mb-8">
+        <div className="flex items-end justify-center mb-8">
           {topThree.length > 1 && (
             <div className="flex flex-col items-center p-4 mt-8">
-              <img
+              {/* <img
                 src={getProfileImage(topThree[1].photoUrl)}
-                alt={topThree[1].name}
-                className="w-24 h-24 rounded-full mb-2"
-              />
+                className="w-24 h-24 mb-2 rounded-full"
+              /> */}
               <span className="text-lg font-bold">{topThree[1].name}</span>
               <div className="w-24 h-40 flex flex-col justify-center items-center mt-2 bg-[#6100c2] rounded-lg">
-                <div className="text-4xl font-bold mb-2">🎖️</div>
+                <div className="mb-2 text-4xl font-bold">🎖️</div>
                 <span className="text-4xl font-bold">{topThree[1].rating}</span>
                 <span className="text-lg font-semibold">Vendas</span>
               </div>
@@ -68,14 +70,14 @@ function RankMain() {
           )}
           {topThree.length > 0 && (
             <div className="flex flex-col items-center p-4">
-              <img
+              {/* <img
                 src={getProfileImage(topThree[0].photoUrl)}
                 alt={topThree[0].name}
-                className="w-24 h-24 rounded-full mb-2"
-              />
+                className="w-24 h-24 mb-2 rounded-full"
+              /> */}
               <span className="text-lg font-bold">{topThree[0].name}</span>
               <div className="w-24 h-52 flex flex-col justify-center items-center mt-2 bg-[#FFD700] rounded-lg">
-                <div className="text-4xl font-bold mb-2">🏆</div>
+                <div className="mb-2 text-4xl font-bold">🏆</div>
                 <span className="text-4xl font-bold">{topThree[0].rating}</span>
                 <span className="text-lg font-semibold">Vendas</span>
               </div>
@@ -86,11 +88,11 @@ function RankMain() {
               <img
                 src={getProfileImage(topThree[2].photoUrl)}
                 alt={topThree[2].name}
-                className="w-24 h-24 rounded-full mb-2"
+                className="w-24 h-24 mb-2 rounded-full"
               />
               <span className="text-lg font-bold">{topThree[2].name}</span>
               <div className="w-24 h-36 flex flex-col justify-center items-center mt-2 bg-[#6100c2] rounded-lg">
-                <div className="text-4xl font-bold mb-2">🎖️</div>
+                <div className="mb-2 text-4xl font-bold">🎖️</div>
                 <span className="text-4xl font-bold">{topThree[2].rating}</span>
                 <span className="text-lg font-semibold">Vendas</span>
               </div>
@@ -104,10 +106,10 @@ function RankMain() {
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-left p-2">Rank</th>
-                  <th className="text-left p-2">Foto</th>
-                  <th className="text-left p-2">Name</th>
-                  <th className="text-center p-2">Score</th>
+                  <th className="p-2 text-left">Rank</th>
+                  <th className="p-2 text-left">Foto</th>
+                  <th className="p-2 text-left">Name</th>
+                  <th className="p-2 text-center">Score</th>
                 </tr>
               </thead>
               <tbody>

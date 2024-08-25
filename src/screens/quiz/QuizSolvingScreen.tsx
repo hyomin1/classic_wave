@@ -22,6 +22,7 @@ export const QuizSolvingScreen = (): JSX.Element => {
           const response = await axiosApi.post("/api/quiz/addOrView", {
             bookTitle: book.name,
           });
+
           setQuizData(response.data.questions);
           setQuizListId(response.data.quizListId);
         } else {
@@ -86,12 +87,12 @@ export const QuizSolvingScreen = (): JSX.Element => {
       <Stepper currentStep={currentStep} totalSteps={quizData.length} />
 
       {/* 문제와 선택지 */}
-      <div className="flex flex-col justify-center items-center w-full h-full">
+      <div className="flex flex-col items-center justify-center w-full h-full">
         <div className="bg-[#6100c2] rounded-lg p-8 max-w-4xl w-full">
-          <h2 className="text-white text-3xl font-bold mb-8">
+          <h2 className="mb-8 text-3xl font-bold text-white">
             {currentQuiz?.question || "Loading..."} (Question {currentStep})
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {currentQuiz &&
               Object.keys(currentQuiz.options).map((key, index) => (
                 <button

@@ -4,16 +4,15 @@ import { Link } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
 import axiosApi from "../axios";
 import { useQuery } from "react-query";
-import { fetchLikeData, fetchLikeList } from "../api";
+import { fetchLikeData } from "../api";
 import { setLikeBooks } from "../redux/slices/likeSlice";
 import { FaHeart } from "react-icons/fa";
 
 interface IPopBookProps {
   books: IBook | undefined;
-  isFavor?: boolean;
 }
 
-function BookList({ books, isFavor }: IPopBookProps) {
+function BookList({ books }: IPopBookProps) {
   const { data: likeData, refetch } = useQuery<number[]>(
     "like",
     fetchLikeData,
@@ -23,25 +22,6 @@ function BookList({ books, isFavor }: IPopBookProps) {
       },
     }
   );
-  const { refetch: refetchLikeList } = useQuery<IBook>(
-    ["likeList"],
-    fetchLikeList,
-    {
-      keepPreviousData: true, // 페이지 변경 시 이전 데이터 유지 하기 위함
-
-      // 관심 작품 refetch시 데이터 다시 가져오기 위함
-      onSuccess: (data) => {
-        if (isFavor) {
-          setBookData(data);
-        }
-      },
-    }
-  );
-
-  const [bookData, setBookData] = useState<IBook>();
-  useEffect(() => {
-    setBookData(books);
-  }, []);
 
   const setLike = async (bookId: number) => {
     await axiosApi.post(`/api/like?bookId=${bookId}`);
@@ -51,9 +31,6 @@ function BookList({ books, isFavor }: IPopBookProps) {
     await axiosApi.delete(`/api/like?bookId=${bookId}`);
     refetch();
     // 관심 작품 라우팅시 좋아요 해제 시 refetch
-    if (isFavor) {
-      refetchLikeList();
-    }
   };
 
   const setFavor = (bookId: number, e: React.MouseEvent<HTMLButtonElement>) => {
@@ -65,9 +42,35 @@ function BookList({ books, isFavor }: IPopBookProps) {
       setLike(bookId);
     }
   };
+  const fetchImg = async () => {
+    // data?.content가 undefined일 경우 빈 배열을 기본값으로 사용
+    const imgs =
+      books?.content?.map(async (book) => {
+        const res = await axiosApi.get("/api/book/thumbnail", {
+          params: {
+            bookId: book.id,
+          },
+        });
+        return res.data;
+      }) || []; // 빈 배열을 기본값으로 설정
+
+    try {
+      // imgs가 빈 배열이 아닌 경우에만 Promise.all을 호출
+      const imgurl = await Promise.all(imgs);
+      setBookImg(imgurl);
+    } catch (error) {
+      console.error("Failed to fetch image URLs", error);
+    }
+  };
+
+  const [bookImg, setBookImg] = useState<any>();
+  useEffect(() => {
+    fetchImg();
+  }, []);
+
   return (
     <div className="grid w-full grid-cols-4 gap-4 overflow-y-auto scrollbar">
-      {bookData?.content.map((book, index) => (
+      {books?.content.map((book, index) => (
         <div
           key={index}
           className="border border-white rounded-2xl hover:opacity-60 w-[90%] mb-8"
@@ -75,7 +78,7 @@ function BookList({ books, isFavor }: IPopBookProps) {
           <Link
             to={`/detailBook/${book.id}`}
             className="bg-center bg-cover w-[100%] h-44 rounded-t-2xl flex justify-end"
-            style={{ backgroundImage: "url('/images/dog.png')" }}
+            style={{ backgroundImage: `url('${bookImg && bookImg[index]}')` }}
           >
             <button
               onClick={(e) => setFavor(book.id, e)}

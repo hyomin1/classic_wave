@@ -7,6 +7,7 @@ export const fetchBookData = async (searchCond: string, page: number) => {
       page,
     },
   });
+
   return data;
 };
 
@@ -22,4 +23,13 @@ export const fetchLikeData = async () => {
 export const fetchLikeList = async () => {
   const { data } = await axiosApi.get("/api/book/liked-list");
   return data;
+};
+
+export const getImg = async (bookId: number) => {
+  const res = await axiosApi.get("/api/book/thumbnail", {
+    params: {
+      bookId,
+    },
+  });
+  return res.data;
 };

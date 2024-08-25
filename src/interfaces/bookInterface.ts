@@ -1,4 +1,4 @@
-interface IScene {
+export interface IScene {
   id: number;
   image: string;
   plotSummary: string;
