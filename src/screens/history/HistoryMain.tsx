@@ -22,7 +22,6 @@ function HistoryMain() {
         // 히스토리 데이터를 먼저 가져옵니다.
         const response = await axiosApi.get("/api/history");
         const data = response.data;
-        console.log(response.data);
 
         // 각 히스토리 아이템에 대해 totalScore를 가져오기 위한 API 호출
         const updatedData = await Promise.all(
@@ -49,6 +48,7 @@ function HistoryMain() {
         );
 
         setHistoryData(updatedData);
+        await fetchImg(updatedData);
       } catch (error) {
         console.error("Failed to fetch hissstory dddatasss", error);
       }
@@ -56,7 +56,7 @@ function HistoryMain() {
 
     fetchHistoryData();
   }, []);
-  const fetchImg = async () => {
+  const fetchImg = async (historyData: HistoryItem[]) => {
     // data?.content가 undefined일 경우 빈 배열을 기본값으로 사용
     const imgs =
       historyData?.map(async (history) => {
@@ -79,9 +79,6 @@ function HistoryMain() {
   };
 
   const [bookImg, setBookImg] = useState<any>();
-  useEffect(() => {
-    fetchImg();
-  }, []);
 
   return (
     <div className="w-[80%] p-8 bg-[#151515] overflow-y-auto h-screen">
