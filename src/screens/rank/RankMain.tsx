@@ -85,11 +85,11 @@ function RankMain() {
           )}
           {topThree.length > 2 && (
             <div className="flex flex-col items-center p-4 mt-8">
-              <img
+              {/* <img
                 src={getProfileImage(topThree[2].photoUrl)}
                 alt={topThree[2].name}
                 className="w-24 h-24 mb-2 rounded-full"
-              />
+              /> */}
               <span className="text-lg font-bold">{topThree[2].name}</span>
               <div className="w-24 h-36 flex flex-col justify-center items-center mt-2 bg-[#6100c2] rounded-lg">
                 <div className="mb-2 text-4xl font-bold">🎖️</div>
@@ -107,7 +107,7 @@ function RankMain() {
               <thead>
                 <tr>
                   <th className="p-2 text-left">Rank</th>
-                  <th className="p-2 text-left">Foto</th>
+
                   <th className="p-2 text-left">Name</th>
                   <th className="p-2 text-center">Score</th>
                 </tr>
@@ -116,13 +116,7 @@ function RankMain() {
                 {leaderboard.map((item, index) => (
                   <tr key={item.loginId} className="border-t border-gray-700">
                     <td className="p-2">{index + 4}</td>
-                    <td className="p-2">
-                      <img
-                        src={getProfileImage(item.photoUrl)}
-                        alt={item.name}
-                        className="w-12 h-12 rounded-full"
-                      />
-                    </td>
+
                     <td className="p-2">{item.name}</td>
                     <td className="p-2 text-center">{item.rating}</td>
                   </tr>

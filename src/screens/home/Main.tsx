@@ -95,7 +95,7 @@ function Main() {
   return (
     <div className="w-[80%] bg-[#21201E] pl-4 flex flex-col ">
       <div
-        className="flex flex-col justify-between  p-4 bg-center bg-cover h-[100%]"
+        className="flex flex-col justify-between  p-4 bg-cover h-[100%]"
         style={{
           backgroundImage: `url('${thumbnail}')`,
           backgroundSize: "cover",

@@ -12,7 +12,6 @@ import LatestBook from "./screens/book/LatestBook";
 import FavorBook from "./screens/book/FavorBook";
 import Quiz from "./screens/quiz/Quiz";
 import Profile from "./screens/profile/Profile";
-import Cartoon from "./screens/cartoon/Cartoon";
 import CartoonMain from "./screens/cartoon/CartoonMain";
 
 const router = createBrowserRouter([

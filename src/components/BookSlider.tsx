@@ -91,7 +91,7 @@ function BookSlider({ data }: BookSlideProps) {
           >
             <Link
               to={`/detailBook/${book.id}`}
-              className="bg-center bg-cover w-[100%] h-44 rounded-t-2xl flex justify-end"
+              className="bg-cover w-[100%] h-44 rounded-t-2xl flex justify-end"
               style={{ backgroundImage: `url('${bookImg && bookImg[index]}')` }}
             >
               <button

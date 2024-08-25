@@ -35,7 +35,7 @@ function DetailBookMain() {
     navigate(`/cartoon/${bookId}`);
   };
   const handleQuizStart = () => {
-    navigate("/quiz", { state: { book } });
+    navigate("/quiz/solve", { state: { book } });
   };
   useEffect(() => {
     fetchMetaData();
@@ -48,7 +48,7 @@ function DetailBookMain() {
       </div>
       <div className="flex flex-col w-[100%] h-[100%]">
         <div
-          className="bg-center bg-cover w-[80%] h-[65%] rounded-t-2xl"
+          className="bg-cover w-[80%] h-[65%] rounded-t-2xl"
           style={{ backgroundImage: `url(${img})` }}
         ></div>
         <div className="bg-[#e9e8eb] w-[80%] h-[15%] rounded-b-2xl flex justify-between items-center px-4">

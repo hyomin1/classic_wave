@@ -50,7 +50,7 @@ function HistoryMain() {
 
         setHistoryData(updatedData);
       } catch (error) {
-        console.error("Failed to fetch hissstory datasss", error);
+        console.error("Failed to fetch hissstory dddatasss", error);
       }
     };
 
@@ -74,7 +74,7 @@ function HistoryMain() {
       const imgurl = await Promise.all(imgs);
       setBookImg(imgurl);
     } catch (error) {
-      console.error("Failed to fetch image URLs", error);
+      console.error("Failed to fetch image URLsd", error);
     }
   };
 
@@ -98,7 +98,7 @@ function HistoryMain() {
             <img
               src={bookImg && bookImg[index]} // 필요 시 이미지 경로 수정
               alt={item.bookTitle}
-              className="object-cover w-full h-48"
+              className="object-cover w-full bg-cover"
             />
             <div className="p-4 text-white">
               <div className="flex items-center justify-between">

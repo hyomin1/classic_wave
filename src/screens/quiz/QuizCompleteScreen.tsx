@@ -6,7 +6,7 @@ interface QuizCompleteScreenProps {
   totalQuestions: number;
   quizListId: number;
   userAnswers: number[];
-  score: number; 
+  score: number;
 }
 
 export const QuizCompleteScreen = ({
@@ -37,20 +37,21 @@ export const QuizCompleteScreen = ({
 
   const handleComplete = () => {
     if (finalScore !== null) {
-      navigate("/history", { state: { score: finalScore } }); // 히스토리 페이지로 이동하면서 점수 전달
+      navigate("/home");
+      //navigate("/history", { state: { score: finalScore } }); // 히스토리 페이지로 이동하면서 점수 전달
     }
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg p-8 max-w-2xl w-full relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="relative w-full max-w-2xl p-8 bg-white rounded-lg">
         {finalScore !== null ? (
           <>
-            <div className="flex justify-center items-center mb-8">
+            <div className="flex items-center justify-center mb-8">
               <div className="bg-[#6100c2] rounded-full w-64 h-64 flex items-center justify-center">
                 <div className="text-center">
-                  <p className="text-white text-xl mb-2">Your score</p>
-                  <p className="text-white text-6xl font-bold">{finalScore}</p>
+                  <p className="mb-2 text-xl text-white">Your score</p>
+                  <p className="text-6xl font-bold text-white">{finalScore}</p>
                 </div>
               </div>
             </div>

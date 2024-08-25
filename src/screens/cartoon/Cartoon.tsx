@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 function Cartoon() {
   const data = useAppSelector((state) => state.cartoon);
-  console.log(data.cartoon);
+
   return (
     <div className="bg-[#21201E] h-screen p-12">
       <Title />

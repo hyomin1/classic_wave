@@ -32,17 +32,17 @@ function SceneList({ sceneList }: ISceneList) {
 
   return (
     <div className="flex items-center justify-between h-[80%]">
-      <div className="w-[100%] h-[100%]">
+      <div className="w-[100%] h-[90%]">
         {sceneList.map(
           (scene, index) =>
             page === index && (
-              <div key={index} className="w-[100%] h-[60%] flex flex-col">
+              <div key={index} className="w-[100%] h-[95%] flex flex-col">
                 <img
                   src={thumbnail}
                   alt="scene"
                   className="w-[100%] h-[100%] transition duration-300 ease-in-out"
                 />
-                <div className="flex justify-between h-[10%] my-16">
+                <div className="flex justify-between h-[10%]  mt-2 mb-2">
                   {page !== 0 ? (
                     <IoIosArrowBack
                       onClick={handlePrevPage}
