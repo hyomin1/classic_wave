@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosApi from "../../axios"; // axios 인스턴스
+import Header from "../../components/Header";
 
 interface HistoryItem {
   quizsubmitId: number;
@@ -14,6 +15,7 @@ interface HistoryItem {
 
 function HistoryMain() {
   const [historyData, setHistoryData] = useState<HistoryItem[]>([]);
+  const [bookImg, setBookImg] = useState<any>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +24,6 @@ function HistoryMain() {
         // 히스토리 데이터를 먼저 가져옵니다.
         const response = await axiosApi.get("/api/history");
         const data = response.data;
-        console.log(response.data);
 
         // 각 히스토리 아이템에 대해 totalScore를 가져오기 위한 API 호출
         const updatedData = await Promise.all(
@@ -49,14 +50,15 @@ function HistoryMain() {
         );
 
         setHistoryData(updatedData);
+        await fetchImg(updatedData);
       } catch (error) {
-        console.error("Failed to fetch hissstory dddatasss", error);
+        console.error("Failed to fetch history data", error);
       }
     };
 
     fetchHistoryData();
   }, []);
-  const fetchImg = async () => {
+  const fetchImg = async (historyData: HistoryItem[]) => {
     // data?.content가 undefined일 경우 빈 배열을 기본값으로 사용
     const imgs =
       historyData?.map(async (history) => {
@@ -74,47 +76,41 @@ function HistoryMain() {
       const imgurl = await Promise.all(imgs);
       setBookImg(imgurl);
     } catch (error) {
-      console.error("Failed to fetch image URLsd", error);
+      console.error("Failed to fetch image URLs", error);
     }
   };
 
-  const [bookImg, setBookImg] = useState<any>();
-  useEffect(() => {
-    fetchImg();
-  }, []);
-
   return (
-    <div className="w-[80%] p-8 bg-[#151515] overflow-y-auto h-screen">
-      <div className="mb-8">
-        <h1 className="mt-4 text-3xl font-bold text-white">히스토리</h1>
+    <div className="w-[80%] bg-[#21201E] pl-4 flex flex-col p-4">
+      <Header />
+      <div className="mt-12 mb-4">
+        <span className="text-xl font-bold text-white">히스토리</span>
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+
+      <div className="grid w-full grid-cols-4 gap-4 overflow-y-auto scrollbar">
         {historyData.map((item, index) => (
           <div
             key={item.quizsubmitId}
-            className="bg-[#21201E] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+            className="border border-white rounded-2xl hover:opacity-60 w-[90%] mb-8"
             onClick={() => navigate(`/history/${item.quizsubmitId}`)}
           >
-            <img
-              src={bookImg && bookImg[index]} // 필요 시 이미지 경로 수정
-              alt={item.bookTitle}
-              className="object-cover w-full bg-cover"
-            />
-            <div className="p-4 text-white">
+            <div
+              className="bg-cover w-[100%] h-44 rounded-t-2xl flex justify-end"
+              style={{ backgroundImage: `url('${bookImg && bookImg[index]}')` }}
+            ></div>
+
+            <div className="w-[100%] rounded-b-2xl bg-[#e9e8eb] h-20 flex flex-col justify-center px-2">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold">{item.bookTitle}</h2>
-                <p className="text-lg font-bold">
+                <h2 className="text-xl font-bold text-black">
+                  {item.bookTitle}
+                </h2>
+                <p className="text-lg font-bold text-black">
                   {item.score !== undefined
                     ? `${item.score}/${item.totalQuestions}`
                     : "미채점"}
                 </p>
               </div>
-              <div className="flex items-center justify-between">
-                <p className="text-gray-400">{`${item.publishedYear} | ${item.author}`}</p>
-                <button className="text-sm font-bold text-purple-500">
-                  상세보기
-                </button>
-              </div>
+              <span className="text-gray-500">{`${item.publishedYear} | ${item.author}`}</span>
             </div>
           </div>
         ))}

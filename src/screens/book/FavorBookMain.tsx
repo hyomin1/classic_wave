@@ -8,6 +8,7 @@ import { CiHeart } from "react-icons/ci";
 import axiosApi from "../../axios";
 import { setLikeBooks } from "../../redux/slices/likeSlice";
 import { Link } from "react-router-dom";
+import Header from "../../components/Header";
 
 function FavorBookMain() {
   const [page, setPage] = useState(0);
@@ -69,6 +70,7 @@ function FavorBookMain() {
 
   return (
     <div className="w-[80%] bg-[#21201E] pl-4 flex flex-col p-4">
+      <Header />
       <div className="mt-12 mb-4">
         <span className="text-xl font-bold text-white">관심 작품</span>
       </div>

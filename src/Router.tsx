@@ -14,6 +14,7 @@ import Quiz from "./screens/quiz/Quiz";
 import Profile from "./screens/profile/Profile";
 import CartoonMain from "./screens/cartoon/CartoonMain";
 
+
 const router = createBrowserRouter([
   {
     path: "/",

@@ -16,6 +16,7 @@ import { setLatestBooks, setPopularBooks } from "../../redux/slices/bookSlice";
 import axiosApi from "../../axios";
 import { setLikeBooks } from "../../redux/slices/likeSlice";
 import { useEffect, useState } from "react";
+import Header from "../../components/Header";
 
 function Main() {
   const dispatch = useAppDispatch();
@@ -101,21 +102,7 @@ function Main() {
           backgroundSize: "cover",
         }}
       >
-        <div className="flex justify-between">
-          <div></div>
-          <div className="flex items-center">
-            <Link to={"/search"}>
-              <FaSearch className="fill-[white] w-6 h-6 hover:opacity-60 mr-4" />
-            </Link>
-
-            <img
-              src="/images/profile.png"
-              alt="기본 프로필 이미지"
-              className="w-8 h-8 rounded-full"
-            />
-            <span className="ml-2 text-lg font-bold text-white">이효민</span>
-          </div>
-        </div>
+        <Header />
 
         <div className="flex flex-col text-white">
           <span className="my-4 text-3xl font-extrabold">

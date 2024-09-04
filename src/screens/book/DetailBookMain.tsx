@@ -9,37 +9,36 @@ import { getImg } from "../../api";
 function DetailBookMain() {
   const { bookId } = useParams();
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
-
   const [book, setBook] = useState<IBookDetail>();
+  const [img, setImg] = useState("");
+
   const fetchMetaData = async () => {
-    // 상세보기
-    // secentList가 그림책 만드는 데이터
     const res = await axiosApi.get("/api/book/metadata", {
-      params: {
-        bookId,
-      },
+      params: { bookId },
     });
 
     dispatch(setCartoon(res.data));
     setBook(res.data);
   };
-  const [img, setImg] = useState("");
+
+  useEffect(() => {
+    fetchMetaData();
+  }, [bookId]);
+
   useEffect(() => {
     if (book) {
       getImg(book.id).then((data) => setImg(data));
     }
   }, [book]);
+
   const goCartoon = () => {
     navigate(`/cartoon/${bookId}`);
   };
+
   const handleQuizStart = () => {
-    navigate("/quiz/solve", { state: { book } });
+    navigate("/quiz/solve", { state: { book } }); 
   };
-  useEffect(() => {
-    fetchMetaData();
-  }, []);
 
   return (
     <div className="w-[80%] bg-[#21201E] pl-4 flex flex-col p-4">
